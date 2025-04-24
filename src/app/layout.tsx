@@ -7,7 +7,7 @@ import { AppProvider } from '@/providers/AppProvider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Notes App',
+  title: 'Docket',
   description: 'A modern note-taking application',
 };
 
