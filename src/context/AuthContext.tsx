@@ -68,11 +68,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signInWithGoogle = async () => {
+    const isLocalhost = window.location.hostname === 'localhost' || 
+    window.location.hostname === '127.0.0.1';
+    const redirectUrl = isLocalhost 
+    ? `${window.location.origin}/dashboard`
+    : 'https://docket-ten.vercel.app/dashboard';
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: '/dashboard',
+          redirectTo: redirectUrl,
         },
       });
       if (error) throw error;
@@ -84,12 +89,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = async (email: string, password: string) => {
     try {
+      // Determine the correct redirect URL
+      const isLocalhost = window.location.hostname === 'localhost' || 
+                          window.location.hostname === '127.0.0.1';
+      
+      // Use the deployed URL for production, or fallback to origin for local development
+      const redirectUrl = isLocalhost 
+        ? `${window.location.origin}/dashboard`
+        : 'https://docket-ten.vercel.app/dashboard';
+      
       // Use the default Supabase auth functionality with email verification disabled
       const { error } = await supabase.auth.signUp({ 
         email, 
         password,
         options: {
-          emailRedirectTo: '/dashboard',
+          emailRedirectTo: redirectUrl,
           data: {
             email_confirmed: true // This marks the email as already confirmed
           }
