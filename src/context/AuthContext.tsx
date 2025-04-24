@@ -74,6 +74,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
+        options: {
+          // pick a dedicated callback route…
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
       });
       if (error) throw error;
       router.replace('/dashboard');
@@ -89,11 +93,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { error } = await supabase.auth.signUp({ 
         email, 
         password,
-        options: {
-          data: {
-            email_confirmed: true // This marks the email as already confirmed
-          }
-        }
       });
       
       if (error) throw error;

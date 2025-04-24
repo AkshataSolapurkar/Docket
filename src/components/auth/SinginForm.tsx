@@ -34,7 +34,6 @@ export function SignInForm() {
     setIsLoading(true);
     try {
       await signInWithGoogle();
-      router.replace('/dashboard');
     } catch (error) {
       toast.error('Failed to sign in with Google.');
       console.error(error);

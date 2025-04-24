@@ -42,8 +42,6 @@ export function SignUpForm() {
     try {
       await signInWithGoogle();
       // For Google sign-in, the redirect happens automatically via OAuth
-      // But we can still try to redirect after the OAuth flow completes
-      router.replace('/dashboard');
     } catch (error) {
       toast.error('Failed to sign in with Google.');
       console.error(error);
