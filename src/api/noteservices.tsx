@@ -3,9 +3,17 @@ import supabase from '@/lib/supabase';
 import { Note, NoteFormData } from '@/lib/Types/NoteTypes';
 
 export async function getNotes(): Promise<Note[]> {
+  // Get the current user
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    throw new Error('User must be logged in to view notes');
+  }
+  
   const { data, error } = await supabase
     .from('notes')
     .select('*')
+    .eq('user_id', user.id) // Filter notes by the current user's ID
     .order('is_pinned', { ascending: false })
     .order('updated_at', { ascending: false });
 
