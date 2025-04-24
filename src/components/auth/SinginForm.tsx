@@ -5,12 +5,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 export function SignInForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { signIn, signInWithGoogle } = useAuth();
+  const router = useRouter()
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,6 +20,7 @@ export function SignInForm() {
     
     try {
       await signIn(email, password);
+      router.replace('/dashboard');
       toast.success('You have successfully signed in.');
     } catch (error) {
       toast.error('Failed to sign in. Please check your credentials.');
@@ -31,6 +34,7 @@ export function SignInForm() {
     setIsLoading(true);
     try {
       await signInWithGoogle();
+      router.replace('/dashboard');
     } catch (error) {
       toast.error('Failed to sign in with Google.');
       console.error(error);

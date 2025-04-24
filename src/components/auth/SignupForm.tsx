@@ -5,12 +5,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 export function SignUpForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { signUp, signInWithGoogle } = useAuth();
+  const router = useRouter();
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,7 +20,8 @@ export function SignUpForm() {
     
     try {
       await signUp(email, password);
-      toast.success('Check your email to confirm your account.');
+      toast.success('Account created successfully!');
+      router.replace('/dashboard');
     } catch (error: any) {
       // More specific error message based on the error
       if (error.message.includes("already exists")) {
@@ -38,6 +41,9 @@ export function SignUpForm() {
     setIsLoading(true);
     try {
       await signInWithGoogle();
+      // For Google sign-in, the redirect happens automatically via OAuth
+      // But we can still try to redirect after the OAuth flow completes
+      router.replace('/dashboard');
     } catch (error) {
       toast.error('Failed to sign in with Google.');
       console.error(error);
